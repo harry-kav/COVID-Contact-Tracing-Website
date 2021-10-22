@@ -1,0 +1,172 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang = "en"></html>
+
+<head>
+    <title> settings </title>
+    <meta name = "settings" content = "settings" >
+	<meta name = "author" content = "Harry">
+	<meta charset="utf-8"/>
+	
+	<link rel = "stylesheet" href = "style.css">
+
+    <script>
+
+        function formValidation()
+        {
+            var x = parseInt(document.getElementById("distance").value);
+
+            if (x >= 0 && x <= 500)
+            {
+                alert('Settings updated');
+                return true;
+            }
+            else
+            {
+                alert("Invalid distance: "+x);
+                return false;
+            }
+        }
+
+    </script>
+
+</head>
+
+<body>
+
+    <h1> COVID-19 Contact Tracing</h1>
+
+    <div class = "sidebar">
+
+        <a href="homepage.php"><button>Home</button></a><br>
+        <a href="overview.php"><button>Overview</button></a><br>
+        <a href="add_visit.html"><button>Add Visit</button></a><br>
+        <a href="report.html"><button>Report</button></a><br>
+        <a href="settings.html"><button>Settings</button></a><br><br><br>
+        <a href="logout.php"><button>Logout</button></a>
+
+    </div>
+
+    <div class = "main">
+        <h2>Settings</h2>
+        <hr>
+        <p>© 2021 Harry Collins</p>
+    </div>
+
+    <form method = "POST" action = "settings.php" onsubmit="return formValidation()">
+        
+        <div class="buttonHolder">
+
+            <div class="custom-select" style="width:400px; display:inline-block;">
+                <br><br>
+                <select name="window" id="window" required >
+                    <option selected disabled value = "7" >Window</option>
+                    <option value="7">1 week</option>
+                    <option value="14">2 weeks</option>
+                    <option value="21">3 weeks</option>
+                    <option value="28">4 weeks</option>
+                </select>
+            </div>
+            <br><br>
+            <label for="distance">Distance: 0-500</label><br>
+            <input class="input_button" type="text" id="distance" name="distance" style = "text-align: center;width: 310px" required><br><br>
+
+        </div>
+
+        <button class = "submit_button" style = "float:left;" type="submit" value="Submit">Submit</button>
+        
+        <button class = "submit_button" style="position: absolute; right: 0;" type="reset" value="Reset">Cancel</button><br>
+    
+    </form>
+
+
+    <script>
+        //this script creates the custom drop-down box
+        var x, i, j, l, ll, selElmnt, a, b, c;
+        /* Look for any elements with the class "custom-select": */
+        x = document.getElementsByClassName("custom-select");
+        l = x.length;
+        for (i = 0; i < l; i++) {
+            selElmnt = x[i].getElementsByTagName("select")[0];
+            ll = selElmnt.length;
+            /* For each element, create a new DIV that will act as the selected item: */
+            a = document.createElement("DIV");
+            a.setAttribute("class", "select-selected");
+            a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+            x[i].appendChild(a);
+            /* For each element, create a new DIV that will contain the option list: */
+            b = document.createElement("DIV");
+            b.setAttribute("class", "select-items select-hide");
+            for (j = 1; j < ll; j++) {
+                /* For each option in the original select element,
+                create a new DIV that will act as an option item: */
+                c = document.createElement("DIV");
+                c.innerHTML = selElmnt.options[j].innerHTML;
+                c.addEventListener("click", function(e) {
+                    /* When an item is clicked, update the original select box,
+                    and the selected item: */
+                    var y, i, k, s, h, sl, yl;
+                    s = this.parentNode.parentNode.getElementsByTagName("select")[0];
+                    sl = s.length;
+                    h = this.parentNode.previousSibling;
+                    for (i = 0; i < sl; i++) 
+                    {
+                        if (s.options[i].innerHTML == this.innerHTML) {
+                            s.selectedIndex = i;
+                            h.innerHTML = this.innerHTML;
+                            y = this.parentNode.getElementsByClassName("same-as-selected");
+                            yl = y.length;
+                            for (k = 0; k < yl; k++) {
+                                y[k].removeAttribute("class");
+                            }
+                            this.setAttribute("class", "same-as-selected");
+                            break;
+                        }
+                    }
+                    h.click();
+                });
+                b.appendChild(c);
+            }
+            x[i].appendChild(b);
+            a.addEventListener("click", function(e) 
+            {
+                /* When the select box is clicked, close any other select boxes,
+                and open/close the current select box: */
+                e.stopPropagation();
+                closeAllSelect(this);
+                this.nextSibling.classList.toggle("select-hide");
+                this.classList.toggle("select-arrow-active");
+            });
+        }
+
+        function closeAllSelect(elmnt) {
+            /* A function that will close all select boxes in the document,
+            except the current select box: */
+            var x, y, i, xl, yl, arrNo = [];
+            x = document.getElementsByClassName("select-items");
+            y = document.getElementsByClassName("select-selected");
+            xl = x.length;
+            yl = y.length;
+            for (i = 0; i < yl; i++) {
+                if (elmnt == y[i]) {
+                    arrNo.push(i)
+                } 
+                else {
+                    y[i].classList.remove("select-arrow-active");
+                }
+            }
+            for (i = 0; i < xl; i++) {
+                if (arrNo.indexOf(i)) {
+                    x[i].classList.add("select-hide");
+                }
+            }
+        }
+
+        /* If the user clicks anywhere outside the select box,
+        then close all select boxes: */
+        document.addEventListener("click", closeAllSelect);
+
+    </script>
+
+</body>

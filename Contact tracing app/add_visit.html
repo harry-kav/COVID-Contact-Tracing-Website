@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang = "en"></html>
+
+<head>
+    <title> addvisit </title>
+    <meta name = "add visit" content = "add a visit" >
+	<meta name = "author" content = "Harry">
+	<meta charset="utf-8"/>
+	
+	<link rel = "stylesheet" href = "style.css">
+
+    <script>
+        function checkMarker()
+        {
+            with(document.getElementById('marker_black'))
+            {
+                
+                if(style.display == "none")
+                {
+                    alert("Please click where you visited on the map")
+                    return false;
+                }
+                else
+                {
+                    alert("Adding visit")
+                    return true;
+                }
+                
+            }
+        }
+        
+        //sets the max time input to today
+        function timeMax()
+        {
+            document.getElementById("time").max = new Date().toISOString().split("T")[0];
+        }
+        window.onload = timeMax();
+    
+    </script>
+
+</head>
+
+<body>
+
+    <h1> COVID-19 Contact Tracing</h1>
+
+    <div class = "sidebar">
+
+        <a href="homepage.php"><button>Home</button></a><br>
+        <a href="overview.php"><button>Overview</button></a><br>
+        <a href="add_visit.html"><button>Add Visit</button></a><br>
+        <a href="report.html"><button>Report</button></a><br>
+        <a href="settings.html"><button>Settings</button></a><br><br><br>
+        <a href="logout.php"><button>Logout</button></a>
+
+    </div>
+
+    <div class = "main">
+        <h2>Add Visit</h2>
+        <hr><br>
+    </div>
+    <form method = "POST" action = "add_visit.php" style = "float:left;" onsubmit="return checkMarker()">
+        <label for="date">Date:</label><br>
+        <input class="input_button" type="date" id="date" name="date" required><br>
+        <label for="time">Time:</label><br>
+        <input class="input_button" type="time" id="time" name="time" required><br>
+        <label for="duration">Duration:</label><br>
+        <input class="input_button" type="text" id="duration" name="duration" required><br><br><br>
+
+        <input  type="hidden" id="x_pos"name="x_pos" required>
+        <input  type="hidden" id="y_pos"name="y_pos" required>
+
+        <button class = "submit_button" type="submit" value="Submit" style = "width:165px">Add</button>
+        <button class = "submit_button" type="reset" value="Reset" style = "width:165px">Cancel</button><br>
+        <p>© 2021 Harry Collins</p>
+
+
+    </form>
+
+        <img src = 'exeter.jpg' class = 'map' id = 'map' alt = 'exeter map' style="position:static;width:500px;height:500px;float:right; z-index: 10px;">
+        <img src="marker_black.png" id="marker_black" style="width: 20px;height: 20px;display: none; position: absolute; z-index: 11px;" />
+
+        <script type="text/javascript">
+        //selecting a point on the map
+            document.getElementById('map').onclick = function(e)
+            {
+            with(document.getElementById('marker_black'))
+            {
+                
+                    style.left = (e.pageX -10) + 'px';
+                    style.top = (e.pageY - 20) + 'px';
+                    style.display = 'block';
+            }
+            //send the data to the form
+            document.getElementById("x_pos").value = (e.pageX) - document.getElementById("map").offsetLeft;
+            document.getElementById("y_pos").value = (e.pageY) - document.getElementById("map").offsetTop;
+            };
+        </script>
+
+    </body>
